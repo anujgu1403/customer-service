@@ -1,6 +1,7 @@
 package com.retail.customer.infrastructure.repository;
 
 import com.retail.customer.domain.CustomerModel;
+import com.retail.customer.domain.exception.EmailAlreadyExistsException;
 import com.retail.customer.infrastructure.entity.CustomerEntity;
 import com.retail.customer.infrastructure.mapper.CustomerEntityToCustomerModelMapper;
 import com.retail.customer.infrastructure.mapper.CustomerModelToCustomerEntityMapper;
@@ -24,13 +25,15 @@ public class CustomerRepositoryAdapter implements CustomerRepository{
     @Override
     public CustomerModel findByEmail(String email) {
         CustomerEntity customerEntity = customerJpaRepository.findByEmail(email);
-        return customerEntityToCustomerModelMapper.apply(customerEntity);
+        return customerEntity != null ?
+                customerEntityToCustomerModelMapper.apply(customerEntity) :
+                null;
     }
 
     @Override
     public CustomerModel register(CustomerModel customerModel) {
         if (customerJpaRepository.existsByEmail(customerModel.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists: " + customerModel.getEmail());
         }
         CustomerEntity customerEntity = customerModelToCustomerEntityMapper.apply(customerModel);
         return customerEntityToCustomerModelMapper.apply(customerJpaRepository.save(customerEntity));

@@ -7,7 +7,11 @@ import com.retail.customer.controllers.CustomerController;
 import com.retail.customer.domain.AuthResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class CustomerControllerImpl implements CustomerController {
@@ -19,17 +23,24 @@ public class CustomerControllerImpl implements CustomerController {
     private JwtUtil jwtUtil;
 
     @Override
-    public ResponseEntity<?> register(Customer customer) {
-        Customer registeredCustomer = customerService.register(customer);
-        return ResponseEntity.ok(registeredCustomer.getFirstName() + " " + registeredCustomer.getLastName() + " Registered successfully");
+    public ResponseEntity<?> register(@RequestBody Customer customer) {
+        Customer registered = customerService.register(customer);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Registered successfully");
+        response.put("fullName", registered.getFirstName() + " " + registered.getLastName());
+
+        return ResponseEntity.ok(response);
     }
 
     @Override
-    public ResponseEntity<?> login(Customer customer) {
-        if (!customerService.verifyPassword(customer))
-            return ResponseEntity.status(401).body("Invalid credentials");
-        else
-            return ResponseEntity.ok(AuthResponse.builder()
-                    .token(jwtUtil.generateToken(customer.getEmail())).build());
+    public ResponseEntity<?> login(@RequestBody Customer customer) {
+        customerService.verifyPassword(customer);  // will throw exception if fails
+
+        String token = jwtUtil.generateToken(customer.getEmail());
+
+        return ResponseEntity.ok(AuthResponse.builder()
+                .token(token)
+                .build());
     }
 }

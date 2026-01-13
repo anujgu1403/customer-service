@@ -5,6 +5,7 @@ import com.retail.customer.application.mapper.CustomerToCustomerModelMapper;
 import com.retail.customer.application.model.Customer;
 import com.retail.customer.application.services.CustomerService;
 import com.retail.customer.domain.CustomerModel;
+import com.retail.customer.domain.exception.InvalidCredentialsException;
 import com.retail.customer.infrastructure.repository.CustomerRepositoryAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,13 +28,27 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer register(Customer customer) {
-        CustomerModel customerModel = customerRepositoryAdapter.register(customerToCustomerModelMapper.apply(customer));
-        return customerModelToCustomerMapper.apply(customerModel);
+        // Encode password before saving
+        customer.setPassword(encoder.encode(customer.getPassword()));
+
+        CustomerModel customerModel = customerToCustomerModelMapper.apply(customer);
+        CustomerModel savedModel = customerRepositoryAdapter.register(customerModel);
+        return customerModelToCustomerMapper.apply(savedModel);
     }
 
+    @Override
     public boolean verifyPassword(Customer customer) {
-        CustomerModel customerModel = findByEmail(customer.getEmail());
-        return customerModel != null && encoder.matches(customer.getPassword(), customerModel.getPassword());
+        CustomerModel model = customerRepositoryAdapter.findByEmail(customer.getEmail());
+
+        if (model == null) {
+            throw new InvalidCredentialsException("User not found with email: " + customer.getEmail());
+        }
+
+        if (!encoder.matches(customer.getPassword(), model.getPassword())) {
+            throw new InvalidCredentialsException("Incorrect password");
+        }
+
+        return true;
     }
 
     @Override
