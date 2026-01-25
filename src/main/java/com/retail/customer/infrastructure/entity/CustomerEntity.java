@@ -39,4 +39,7 @@ public class CustomerEntity {
     @Builder.Default
     @Column(name="updated_at")
     private OffsetDateTime updatedAt = OffsetDateTime.now();
+
+    @Transient
+    private boolean userExists;
 }

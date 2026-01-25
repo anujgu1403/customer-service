@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/customerdb
     username: postgres
-    password: 1212
+    password: postgres
   jpa:
     hibernate:
       ddl-auto: validate
@@ -13,3 +13,9 @@ app:
   jwt:
     secret: replace_with_long_secret
     expiration-ms: 3600000
+
+
+  messages:
+    basename: messages
+    encoding: UTF-8
+    use-code-as-default-message: true

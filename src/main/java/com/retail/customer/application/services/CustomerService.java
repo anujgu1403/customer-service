@@ -1,7 +1,7 @@
 package com.retail.customer.application.services;
 
 import com.retail.customer.application.model.Customer;
-import com.retail.customer.domain.CustomerModel;
+import com.retail.customer.domain.model.CustomerModel;
 
 public interface CustomerService {
     Customer register(Customer customer);

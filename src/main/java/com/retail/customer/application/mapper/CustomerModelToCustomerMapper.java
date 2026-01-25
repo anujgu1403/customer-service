@@ -1,7 +1,7 @@
 package com.retail.customer.application.mapper;
 
 import com.retail.customer.application.model.Customer;
-import com.retail.customer.domain.CustomerModel;
+import com.retail.customer.domain.model.CustomerModel;
 import org.springframework.stereotype.Component;
 
 @Component

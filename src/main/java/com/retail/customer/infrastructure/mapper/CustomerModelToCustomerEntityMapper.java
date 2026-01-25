@@ -1,6 +1,6 @@
 package com.retail.customer.infrastructure.mapper;
 
-import com.retail.customer.domain.CustomerModel;
+import com.retail.customer.domain.model.CustomerModel;
 import com.retail.customer.infrastructure.entity.CustomerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

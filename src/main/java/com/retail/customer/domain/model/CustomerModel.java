@@ -1,4 +1,4 @@
-package com.retail.customer.domain;
+package com.retail.customer.domain.model;
 
 import lombok.Builder;
 import lombok.Data;

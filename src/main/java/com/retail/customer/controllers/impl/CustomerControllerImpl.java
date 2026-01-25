@@ -4,7 +4,7 @@ import com.retail.customer.application.model.Customer;
 import com.retail.customer.application.services.CustomerService;
 import com.retail.customer.application.util.JwtUtil;
 import com.retail.customer.controllers.CustomerController;
-import com.retail.customer.domain.AuthResponse;
+import com.retail.customer.domain.model.AuthResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;

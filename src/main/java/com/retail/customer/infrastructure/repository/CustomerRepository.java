@@ -1,7 +1,6 @@
 package com.retail.customer.infrastructure.repository;
 
-import com.retail.customer.domain.CustomerModel;
-import com.retail.customer.infrastructure.entity.CustomerEntity;
+import com.retail.customer.domain.model.CustomerModel;
 
 public interface CustomerRepository {
 
